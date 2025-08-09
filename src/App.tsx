@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 
-import AppLayout from "./layouts/AppLayout";
+import LeetCodeLayout from "./layouts/LeetCodeLayout";
 import Index from "./pages/Index";
 import Problem from "./pages/Problem";
 import CodeEditor from "./pages/Editor";
@@ -27,7 +27,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route element={<AppLayout />}>
+            <Route element={<LeetCodeLayout />}>
               <Route path="/" element={<Index />} />
               <Route path="/problem" element={<Problem />} />
               <Route path="/editor" element={<CodeEditor />} />

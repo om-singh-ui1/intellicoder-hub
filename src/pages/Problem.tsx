@@ -1,7 +1,9 @@
 import { Helmet } from "react-helmet-async";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { ProblemHeader } from "@/components/ProblemHeader";
+import { ProblemTabs } from "@/components/ProblemTabs";
+import { Badge } from "@/components/ui/badge";
 
 export default function Problem() {
   return (
@@ -11,17 +13,20 @@ export default function Problem() {
         <meta name="description" content="Clone Graph problem statement, examples, constraints, and related topics." />
         <link rel="canonical" href="/problem" />
       </Helmet>
-      <div className="p-4 space-y-4 animate-fade-in">
-        <header>
-          <h1 className="text-2xl font-semibold">Clone Graph</h1>
-          <div className="mt-2 flex items-center gap-3 text-sm">
-            <Badge className="bg-amber-500/20 text-amber-600">Medium</Badge>
-            <div className="text-muted-foreground">Topics:</div>
-            {['Graph','DFS','BFS','Hash Table'].map(t => (
-              <Badge key={t} variant="secondary">{t}</Badge>
-            ))}
-          </div>
-        </header>
+      
+      <ProblemHeader
+        title="133. Clone Graph"
+        difficulty="Medium"
+        topics={['Hash Table', 'Depth-First Search', 'Breadth-First Search', 'Graph']}
+        companies={['Facebook', 'Amazon', 'Microsoft', 'Google']}
+        liked={false}
+        solved={false}
+      />
+
+      <ProblemTabs>
+        <div className="container mx-auto px-4 py-6">
+          <div className="max-w-4xl">
+            <div className="space-y-6">
 
         <Card>
           <CardHeader><CardTitle>Problem Statement</CardTitle></CardHeader>
@@ -62,15 +67,31 @@ export default function Problem() {
           </CardContent>
         </Card>
 
-        <section aria-label="Similar Problems" className="space-y-2">
-          <h2 className="text-lg font-semibold">Similar Problems</h2>
-          <div className="grid gap-2 text-sm">
-            {['Course Schedule','Graph Valid Tree','Connected Components'].map(s => (
-              <a key={s} href="#" className="story-link w-max">{s}</a>
-            ))}
+            <section aria-label="Similar Problems" className="space-y-4">
+              <h2 className="text-lg font-semibold">Similar Problems</h2>
+              <div className="grid gap-3">
+                {[
+                  { title: 'Copy List with Random Pointer', difficulty: 'Medium' },
+                  { title: 'Course Schedule', difficulty: 'Medium' },
+                  { title: 'Graph Valid Tree', difficulty: 'Medium' }
+                ].map((problem) => (
+                  <a 
+                    key={problem.title} 
+                    href="#" 
+                    className="flex items-center justify-between p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                  >
+                    <span className="text-sm font-medium story-link">{problem.title}</span>
+                    <Badge variant="outline" className="text-xs">
+                      {problem.difficulty}
+                    </Badge>
+                  </a>
+                ))}
+              </div>
+            </section>
+            </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </ProblemTabs>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Editor, { OnChange } from "@monaco-editor/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useAppStore } from "@/store/useAppStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,10 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { ConsolePanel } from "@/components/editor/ConsolePanel";
 import { AIAssistant } from "@/components/editor/AIAssistant";
+import { ProblemHeader } from "@/components/ProblemHeader";
+import { ProblemTabs } from "@/components/ProblemTabs";
+import { Play, Upload, TestTube } from "lucide-react";
 
 export default function CodeEditor() {
   const { currentLanguage, languages, code, setLanguage, setCode, testCases, addRunResult, addTestCase } = useAppStore();
   const { toast } = useToast();
+  const [focusMode, setFocusMode] = useState(false);
 
   const onChange: OnChange = useCallback((value) => {
     setCode(currentLanguage, value || "");
@@ -40,39 +44,74 @@ export default function CodeEditor() {
         <meta name="description" content="Monaco editor with AI assistance. Run and submit your Clone Graph solution." />
         <link rel="canonical" href="/editor" />
       </Helmet>
-      <div className="p-4 space-y-4 animate-fade-in">
-        <header className="flex flex-wrap items-center gap-3">
-          <Select value={currentLanguage} onValueChange={(v) => setLanguage(v as any)}>
-            <SelectTrigger className="w-40"><SelectValue placeholder="Language" /></SelectTrigger>
-            <SelectContent>
-              {languages.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
-            </SelectContent>
-          </Select>
-          <div className="ml-auto flex items-center gap-2">
-            <Button onClick={() => simulateRun('run')}>Run</Button>
-            <Button variant="secondary" onClick={() => simulateRun('submit')}>Submit</Button>
-            <Button variant="outline" onClick={generateTest}>Generate Tests</Button>
+      
+      {!focusMode && (
+        <ProblemHeader
+          title="133. Clone Graph"
+          difficulty="Medium"
+          topics={['Hash Table', 'Depth-First Search', 'Breadth-First Search', 'Graph']}
+          companies={['Facebook', 'Amazon', 'Microsoft', 'Google']}
+          liked={false}
+          solved={false}
+        />
+      )}
+
+      <ProblemTabs 
+        showFocusMode={true} 
+        onFocusModeToggle={() => setFocusMode(!focusMode)}
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="space-y-4">
+            <header className="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <Select value={currentLanguage} onValueChange={(v) => setLanguage(v as any)}>
+                <SelectTrigger className="w-40"><SelectValue placeholder="Language" /></SelectTrigger>
+                <SelectContent>
+                  {languages.map(l => <SelectItem key={l} value={l}>{l}</SelectItem>)}
+                </SelectContent>
+              </Select>
+              <div className="flex items-center gap-2">
+                <Button onClick={() => simulateRun('run')} className="gap-2">
+                  <Play className="h-4 w-4" />
+                  Run
+                </Button>
+                <Button variant="secondary" onClick={() => simulateRun('submit')} className="gap-2">
+                  <Upload className="h-4 w-4" />
+                  Submit
+                </Button>
+                <Button variant="outline" onClick={generateTest} className="gap-2">
+                  <TestTube className="h-4 w-4" />
+                  Tests
+                </Button>
+              </div>
+            </header>
+
+            <div className={`grid gap-4 ${focusMode ? 'grid-cols-1' : 'grid-cols-1 2xl:grid-cols-3'}`}>
+              <Card className={focusMode ? 'col-span-1' : '2xl:col-span-2'}>
+                <CardContent className="p-0">
+                  <Editor
+                    height={focusMode ? "70vh" : "50vh"}
+                    theme="vs-dark"
+                    language={currentLanguage}
+                    value={code[currentLanguage]}
+                    onChange={onChange}
+                    options={{ 
+                      fontFamily: 'Fira Code', 
+                      fontLigatures: true, 
+                      minimap: { enabled: false }, 
+                      scrollbar: { vertical: 'auto' },
+                      fontSize: 14,
+                      lineHeight: 1.6
+                    }}
+                  />
+                </CardContent>
+              </Card>
+              {!focusMode && <AIAssistant />}
+            </div>
+
+            {!focusMode && <ConsolePanel />}
           </div>
-        </header>
-
-        <div className="grid grid-cols-1 2xl:grid-cols-3 gap-4">
-          <Card className="2xl:col-span-2">
-            <CardContent className="p-0">
-              <Editor
-                height="50vh"
-                theme="vs-dark"
-                language={currentLanguage}
-                value={code[currentLanguage]}
-                onChange={onChange}
-                options={{ fontFamily: 'Fira Code', fontLigatures: true, minimap: { enabled: false }, scrollbar: { vertical: 'auto' } }}
-              />
-            </CardContent>
-          </Card>
-          <AIAssistant />
         </div>
-
-        <ConsolePanel />
-      </div>
+      </ProblemTabs>
     </>
   );
 }

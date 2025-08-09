@@ -1,5 +1,8 @@
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ProblemHeader } from "@/components/ProblemHeader";
+import { ProblemTabs } from "@/components/ProblemTabs";
+import { Badge } from "@/components/ui/badge";
 
 export default function Solution() {
   return (
@@ -9,7 +12,19 @@ export default function Solution() {
         <meta name="description" content="DFS and BFS editorial for Clone Graph with complexity analysis." />
         <link rel="canonical" href="/solution" />
       </Helmet>
-      <div className="p-4 space-y-4 animate-fade-in">
+      
+      <ProblemHeader
+        title="133. Clone Graph"
+        difficulty="Medium"
+        topics={['Hash Table', 'Depth-First Search', 'Breadth-First Search', 'Graph']}
+        companies={['Facebook', 'Amazon', 'Microsoft', 'Google']}
+        liked={false}
+        solved={true}
+      />
+
+      <ProblemTabs>
+        <div className="container mx-auto px-4 py-6">
+          <div className="max-w-4xl space-y-6">
         <Card>
           <CardHeader><CardTitle>DFS Solution</CardTitle></CardHeader>
           <CardContent className="space-y-2 text-sm">
@@ -42,8 +57,10 @@ export default function Solution() {
               <li>Space: O(V)</li>
             </ul>
           </CardContent>
-        </Card>
-      </div>
+            </Card>
+          </div>
+        </div>
+      </ProblemTabs>
     </>
   );
 }
